@@ -30,6 +30,9 @@ class github{
   
   
   public:
+  github();
+  ~github();
+  
   void addFile(string name);
   void commit();
   void removeFile(string name);
