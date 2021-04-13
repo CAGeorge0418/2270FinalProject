@@ -6,7 +6,7 @@
 #include <fstream>
 #include <cstring>
 #include <sstream>
-
+using namespace std;
 
 struct doublyNode{
   int commitNumber;
