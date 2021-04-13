@@ -24,14 +24,14 @@ struct singlyNode{
 };
 
 
-class github{
+class miniGit{
   private:
   doublyNode head;
   
   
   public:
-  github();
-  ~github();
+  miniGit();
+  ~miniGit();
   
   void addFile(string name);
   void commit();
