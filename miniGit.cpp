@@ -48,7 +48,15 @@ string traverseGit(string name, doublyNode* chief)
         while(temp_s != NULL)
         {
             temp_s = temp_s->next;
-            if(temp_s->fileName == name) return temp_s->fileVersion;
+            if(temp_s->fileName == name) 
+            {
+                //makes integer of file number, iterates it and returns in the correct format
+                int holder = stoi(temp_s->fileVersion);
+                holder++;
+                if(holder >9) return to_string(holder);
+                else return "0" + to_string(holder);
+
+            }
         }
         tmp_d = tmp_d->next;
     }
@@ -84,47 +92,6 @@ string miniGit::addFile(string name)
     tmp_s->next = adding;
 
     return "File successfully added";
-    
-    
-    
-    
-    #include <iostream>
-#include <fstream>
-#include <io.h>
-#include "miniGit.hpp"
-
-using namespace std;
-
-// CODE FOR DIRECTORY AND ADDING/COMMITTING FILES
-    mkdir("minigit");
-    string filename;
-    cout << "input filename:" << endl;
-    getline(cin, filename);
-    ifstream ifile;
-    ifile.open(filename);
-
-    if (!ifile.is_open())
-    {
-        cout << "could not open " << filename << endl;
-    }
-    else
-    {
-        ofstream ofile;
-        ofile.open("minigit/driver01.cpp");
-        string line = "";
-        while (getline(ifile, line))
-        {
-            ofile << line << endl;
-        }
-        cout << "done" << endl;
-        
-        ofile.close();
-        ifile.close();
-    }
-
- //
-    
-}
 
 }
 
@@ -161,10 +128,84 @@ void miniGit::removeFile(string name)
             deleted = true;
         }
     }
+
 }
 
 void miniGit::commit()
 {
+    doublyNode* tmp_d;
+    while(tmp_d->next != NULL) tmp_d = tmp_d->next;
+
+    singlyNode* tmp_s = tmp_d->head;
+    ifstream ifile;
+
+    while(tmp_s->next != NULL)
+    {
+        string versionHolder = tmp_s->fileVersion;
+        ifile.open("minigit/" + versionHolder);
+
+        //file is not in minigit- must add it
+        if(!ifile.is_open())
+        {
+        ofstream ofile;
+        ofile.open("minigit/"+ versionHolder);
+        string line = "";
+        while (getline(ifile, line)) ofile << line << endl;
+        cout << "Added to the minigit" << endl;
+        
+        ofile.close();
+        ifile.close();
+        }
+
+        //file is in minigit
+        else
+        {
+           ifstream oldVersion;
+
+            //finds correct version name for previous version
+           string name = tmp_s->fileName;
+           string oldv = traverseGit(name,chief);
+           int oldv_int = stoi(oldv)-1;
+
+           oldVersion.open("minigit/"+ name.substr(0,name.size()-3) + "_" + to_string(oldv_int) + name.substr(name.size()-3, 3));
+
+           string old_comp = "";
+           string new_comp = "";
+           string line = "";
+
+            //creates a string that contains all of the old version to compare
+           while (getline(oldVersion, line))
+            {
+                old_comp = old_comp + line;
+            }
+
+            line = "";
+
+            while(getline(ifile, line))
+            {
+                new_comp = new_comp +line;
+            }
+
+            if(old_comp != new_comp)
+            {
+                ofstream ofile;
+                ofile.open("minigit/" + tmp_s->fileVersion);
+                string line = "";
+                while (getline(ifile, line))
+                {
+                    ofile << line << endl;
+                }
+                ofile.close();
+            }
+
+            oldVersion.close();
+   
+        }
+        
+
+    }
+
+ifile.close();
 
 }
 
