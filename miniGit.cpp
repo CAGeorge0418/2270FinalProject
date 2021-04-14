@@ -89,7 +89,37 @@ string miniGit::addFile(string name)
 
 void miniGit::removeFile(string name)
 {
+    doublyNode* tmp_d;
+    while(tmp_d->next != NULL) tmp_d = tmp_d->next;
 
+    singlyNode* tmp_s = tmp_d->head;
+
+    //if the head node in SLL is the one to delete
+    if(tmp_s->fileName == name)
+    {
+        singlyNode* holder = tmp_s;
+        tmp_s = tmp_s->next;
+        delete holder;
+        holder = NULL;
+    }
+
+    //otherwise
+    singlyNode* prev;
+    bool deleted =  false;
+
+    while(tmp_s->next != NULL && deleted == false) 
+    {
+        prev = tmp_s;
+        tmp_s = tmp_s->next;
+
+        if(tmp_s->fileName == name)
+        {
+            prev->next = tmp_s->next;
+            delete tmp_s;
+            tmp_s = NULL;
+            deleted = true;
+        }
+    }
 }
 
 void miniGit::commit()
