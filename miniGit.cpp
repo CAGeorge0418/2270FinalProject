@@ -7,10 +7,7 @@ using namespace std;
 
 miniGit::miniGit()
 {
-    chief->commitNumber = 0;
-    chief->head = NULL;
-    chief->previous = NULL;
-    chief->next = NULL;
+    chief = NULL;
 }
 
 miniGit::~miniGit()
@@ -71,11 +68,14 @@ string miniGit::addFile(string name)
     if(!newbie.is_open()) return "File does not exist in directory";
     newbie.close();
 
-    doublyNode* tmp_d;
+    singlyNode* tmp_s = NULL;
+    doublyNode* tmp_d = chief;
 
-    while(tmp_d->next != NULL) tmp_d = tmp_d->next;
-
-    singlyNode* tmp_s = tmp_d->head;
+    if(chief != NULL) 
+    {
+        while(tmp_d->next != NULL) tmp_d = tmp_d->next;
+        tmp_s = tmp_d->head;
+    }
 
     while(tmp_s->next != NULL) 
     {
@@ -97,8 +97,8 @@ string miniGit::addFile(string name)
 
 void miniGit::removeFile(string name)
 {
-    doublyNode* tmp_d;
-    while(tmp_d->next != NULL) tmp_d = tmp_d->next;
+    doublyNode* tmp_d = chief;
+    if(chief != NULL) while(tmp_d->next != NULL) tmp_d = tmp_d->next;
 
     singlyNode* tmp_s = tmp_d->head;
 
@@ -133,8 +133,8 @@ void miniGit::removeFile(string name)
 
 void miniGit::commit()
 {
-    doublyNode* tmp_d;
-    while(tmp_d->next != NULL) tmp_d = tmp_d->next;
+    doublyNode* tmp_d = chief;
+    if(chief != NULL) while(tmp_d->next != NULL) tmp_d = tmp_d->next;
 
     singlyNode* tmp_s = tmp_d->head;
     ifstream ifile;
