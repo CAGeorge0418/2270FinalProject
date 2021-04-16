@@ -15,43 +15,39 @@ miniGit::~miniGit()
 {
     doublyNode* tmp_d = chief;
 
-    while(tmp_d != NULL)
+    while (tmp_d != NULL)
     {
         singlyNode* temp_s = chief->head;
 
-        while(temp_s != NULL)
+        while (temp_s != NULL)
         {
             chief->head = chief->head->next;
             delete temp_s;
             temp_s = chief->head;
-
         }
-
         chief = chief->next;
         delete tmp_d;
         tmp_d = chief;
     }
-
-
 }
 
 string traverseGit(string name, doublyNode* chief)
 {
     doublyNode* tmp_d = chief;
 
-    while(tmp_d != NULL)
+    while (tmp_d != NULL)
     {
         singlyNode* temp_s = tmp_d->head;
 
-        while(temp_s->next != NULL)
+        while (temp_s->next != NULL)
         {
             temp_s = temp_s->next;
-            if(temp_s->fileName == name) 
+            if (temp_s->fileName == name) 
             {
                 //makes integer of file number, iterates it and returns in the correct format
                 int holder = stoi(temp_s->fileVersion);
                 holder++;
-                if(holder >9) return to_string(holder);
+                if (holder >9) return to_string(holder);
                 else return "0" + to_string(holder);
 
             }
@@ -67,7 +63,7 @@ string miniGit::addFile(string name)
     //checks if file exists in directory
     ifstream newbie;
     newbie.open(name);
-    if(!newbie.is_open()) return "File does not exist in directory";
+    if (!newbie.is_open()) return "File does not exist in directory";
     newbie.close();
 
     //creates temporary variables
@@ -78,10 +74,10 @@ string miniGit::addFile(string name)
     
 
     //locates the most current double node
-    while(tmp_d->next != NULL) tmp_d = tmp_d->next;
+    while (tmp_d->next != NULL) tmp_d = tmp_d->next;
     
     //if the head doesnt exist make it
-    if(tmp_d->head == NULL)
+    if (tmp_d->head == NULL)
     {
         tmp_s = new singlyNode;
         tmp_d->head = tmp_s;
@@ -96,16 +92,16 @@ string miniGit::addFile(string name)
     string version = traverseGit(name, chief);
 
 
-    if(quit == true) 
+    if (quit == true) 
     {
         tmp_s->fileVersion = name.substr(0,name.size()-4) + "_" + version + name.substr(name.size()-4, 4);
         return "File successfully added";
     }
 
     //gets to the most recent node in list
-    while(tmp_s->next != NULL) 
+    while (tmp_s->next != NULL) 
     {
-        if(tmp_s->fileName == name) return "File has already been added";
+        if (tmp_s->fileName == name) return "File has already been added";
         tmp_s = tmp_s->next;
     }
 
@@ -117,18 +113,17 @@ string miniGit::addFile(string name)
     tmp_s->next = adding;
 
     return "File successfully added";
-
 }
 
 void miniGit::removeFile(string name)
 {
     doublyNode* tmp_d = chief;
-    while(tmp_d->next != NULL) tmp_d = tmp_d->next;
+    while (tmp_d->next != NULL) tmp_d = tmp_d->next;
 
     singlyNode* tmp_s = tmp_d->head;
 
     //if the head node in SLL is the one to delete
-    if(tmp_s->fileName == name)
+    if (tmp_s->fileName == name)
     {
         singlyNode* holder = tmp_s;
         tmp_s = tmp_s->next;
@@ -140,7 +135,7 @@ void miniGit::removeFile(string name)
     singlyNode* prev;
     bool deleted =  false;
 
-    while(tmp_s->next != NULL && deleted == false) 
+    while (tmp_s->next != NULL && deleted == false) 
     {
         prev = tmp_s;
         tmp_s = tmp_s->next;
@@ -153,25 +148,24 @@ void miniGit::removeFile(string name)
             deleted = true;
         }
     }
-
 }
 
 //need to maintain commit numbe before adding- make that change
 void miniGit::commit()
 {
     doublyNode* tmp_d = chief;
-    while(tmp_d->next != NULL) tmp_d = tmp_d->next;
+    while (tmp_d->next != NULL) tmp_d = tmp_d->next;
 
     singlyNode* tmp_s = tmp_d->head;
     ifstream ifile;
 
-    while(tmp_s != NULL)
+    while (tmp_s != NULL)
     {
         string versionHolder = tmp_s->fileVersion;
         ifile.open("minigit/" + versionHolder);
 
         //file is not in minigit- must add it
-        if(!ifile.is_open())
+        if (!ifile.is_open())
         {
         ifile.close();
         ifile.open(tmp_s->fileName);
@@ -210,12 +204,12 @@ void miniGit::commit()
 
             line = "";
 
-            while(getline(ifile, line))
+            while (getline(ifile, line))
             {
                 new_comp = new_comp +line;
             }
 
-            if(old_comp != new_comp)
+            if (old_comp != new_comp)
             {
                 ofstream ofile;
                 ofile.open("minigit/" + tmp_s->fileVersion);
@@ -242,6 +236,42 @@ ifile.close();
 
 void miniGit::checkout(int commitNumber)
 {
+    doublyNode* dNode = findDNode(commitNumber);
 
+    if (dNode == NULL)
+    {
+        cout << "Could not find the version with Commit Number " << commitNumber << endl;
+        return;
+    }
+    else
+    {  
+        singlyNode* curr = dNode->head;
+
+        while (curr != NULL)
+        {
+            // stuff stuff stuff
+            // prolly writing to files and copying to current files
+
+            curr = curr->next;
+        }
+    }
 }
 
+doublyNode* miniGit::findDNode(int commitNumber)
+{
+    doublyNode* curr = chief;
+
+    while (curr != NULL)
+    {
+        if (curr->commitNumber == commitNumber)
+        {
+            return curr;
+        }
+
+        curr = curr->next;
+    }
+
+    cout << "Could not find DoublyNode" << endl;
+    return NULL;
+
+}
