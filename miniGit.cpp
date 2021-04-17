@@ -3,10 +3,16 @@
 #include "miniGit.hpp"
 
 using namespace std;
+#include <filesystem>
+namespace fs = std::filesystem;
+
 
 
 miniGit::miniGit()
 {
+    fs::remove_all(".minigit");
+    fs::create_directory(".minigit");
+
     chief = new doublyNode;
     chief->commitNumber = 0;
 }
@@ -15,49 +21,64 @@ miniGit::~miniGit()
 {
     doublyNode* tmp_d = chief;
 
-    while(tmp_d != NULL)
-    {
-        singlyNode* temp_s = chief->head;
+    while(tmp_d->next != NULL)tmp_d = tmp_d->next;
+
+    if(tmp_d->head != NULL)
+        {
+        
+        singlyNode* temp_s = tmp_d->head;
 
         while(temp_s != NULL)
-        {
-            chief->head = chief->head->next;
-            delete temp_s;
-            temp_s = chief->head;
+            {
+                tmp_d->head = tmp_d->head->next;
+                delete temp_s;
+                temp_s = tmp_d->head;
+
+            }
 
         }
+        
+    tmp_d = chief;
+    doublyNode* lag = chief;
 
-        chief = chief->next;
-        delete tmp_d;
-        tmp_d = chief;
+    while(tmp_d->next != NULL)
+    {
+        tmp_d = tmp_d->next;
+        delete lag;
+        lag = tmp_d;
     }
 
-
+    delete tmp_d;
+    tmp_d = NULL;
 }
 
 string traverseGit(string name, doublyNode* chief)
 {
     doublyNode* tmp_d = chief;
 
-    while(tmp_d != NULL)
-    {
-        singlyNode* temp_s = tmp_d->head;
+    while(tmp_d->next != NULL)tmp_d = tmp_d->next;
 
-        while(temp_s->next != NULL)
+    singlyNode* temp_s = tmp_d->head;
+
+    while(temp_s != NULL)
         {
-            temp_s = temp_s->next;
             if(temp_s->fileName == name) 
             {
                 //makes integer of file number, iterates it and returns in the correct format
-                int holder = stoi(temp_s->fileVersion);
+                int holder;
+                if(temp_s->fileVersion == "") return "00";
+                else if(stoi(temp_s->fileVersion.substr(temp_s->fileVersion.size()-5, 1)) > 0)
+                    holder = stoi(temp_s->fileVersion.substr(temp_s->fileVersion.size()-5, 2));
+                
+                else holder = stoi(temp_s->fileVersion.substr(temp_s->fileVersion.size()-5, 1));
+
                 holder++;
                 if(holder >9) return to_string(holder);
                 else return "0" + to_string(holder);
 
             }
+            temp_s = temp_s->next;
         }
-        tmp_d = tmp_d->next;
-    }
 
     return "00";
 }
@@ -78,6 +99,7 @@ string miniGit::addFile(string name)
     
 
     //locates the most current double node
+    //I dont think its getting to the correct one somehow
     while(tmp_d->next != NULL) tmp_d = tmp_d->next;
     
     //if the head doesnt exist make it
@@ -107,11 +129,12 @@ string miniGit::addFile(string name)
     {
         if(tmp_s->fileName == name) return "File has already been added";
         tmp_s = tmp_s->next;
+        if(tmp_s->fileName == name) return "File has already been added";
     }
 
     singlyNode* adding = new singlyNode;
     adding->fileName = name;
-    adding->fileVersion = name.substr(0,name.size()-3) + "_" + version + name.substr(name.size()-3, 3);
+    adding->fileVersion = name.substr(0,name.size()-4) + "_" + version + name.substr(name.size()-4, 4);
     adding->next = NULL;
 
     tmp_s->next = adding;
@@ -167,17 +190,19 @@ void miniGit::commit()
 
     while(tmp_s != NULL)
     {
+        //checks if in the minigit
         string versionHolder = tmp_s->fileVersion;
-        ifile.open("minigit/" + versionHolder);
+        ifile.open(".minigit/" + versionHolder);
 
         //file is not in minigit- must add it
         if(!ifile.is_open())
         {
+        //opens the file in the directory
         ifile.close();
         ifile.open(tmp_s->fileName);
 
         ofstream ofile;
-        ofile.open("minigit/" + versionHolder);
+        ofile.open(".minigit/" + versionHolder);
         string line = "";
         while (getline(ifile, line)) ofile << line << endl;
         cout << "Added to the minigit" << endl;
@@ -189,6 +214,8 @@ void miniGit::commit()
         //file is in minigit
         else
         {
+           ifile.close();
+           ifile.open(tmp_s->fileName);
            ifstream oldVersion;
 
             //finds correct version name for previous version
@@ -196,7 +223,7 @@ void miniGit::commit()
            string oldv = traverseGit(name,chief);
            int oldv_int = stoi(oldv)-1;
 
-           oldVersion.open("minigit/"+ name.substr(0,name.size()-3) + "_" + to_string(oldv_int) + name.substr(name.size()-3, 3));
+           oldVersion.open(".minigit/"+ name.substr(0,name.size()-4) + "_" + "0" + to_string(oldv_int) + name.substr(name.size()-4, 4));
 
            string old_comp = "";
            string new_comp = "";
@@ -212,18 +239,20 @@ void miniGit::commit()
 
             while(getline(ifile, line))
             {
-                new_comp = new_comp +line;
+                new_comp = new_comp + line;
             }
+            ifile.close();
+            ifile.open(name);
 
             if(old_comp != new_comp)
             {
                 ofstream ofile;
-                ofile.open("minigit/" + tmp_s->fileVersion);
-                string line = "";
-                while (getline(ifile, line))
-                {
-                    ofile << line << endl;
-                }
+                oldv_int++;
+                ofile.open(".minigit/" + name.substr(0,name.size()-4) + "_" + "0" + to_string(oldv_int) + name.substr(name.size()-4, 4));
+
+                line = "";
+                while (getline(ifile, line)) ofile << line << endl;
+
                 ofile.close();
             }
 
@@ -237,6 +266,26 @@ void miniGit::commit()
     }
 
 ifile.close();
+
+
+//creates next node
+doublyNode* adding = new doublyNode;
+tmp_d->next = adding;
+adding->commitNumber = tmp_d->commitNumber + 1;
+adding->next = NULL;
+adding->previous = tmp_d;
+
+
+//copies previous SLL to current node
+singlyNode* tracer = tmp_d->head;
+adding->head = tracer;
+singlyNode* helper = adding->head;
+while(tracer->next != NULL)
+    {
+        helper->next = tracer->next;
+        tracer = tracer->next;
+        helper = helper->next;
+    }
 
 }
 

@@ -4,11 +4,11 @@ using namespace std;
 
 int main()
 {
-system("mkdir minigit");
+//system("mkdir minigit");
 
 miniGit g;
 
-g.addFile("driver.cpp");
+g.addFile("hehe.txt");
 g.addFile("practice.txt");
 
 g.commit();
@@ -17,7 +17,8 @@ int pause;
 cin >> pause;
 
 g.addFile("practice.txt");
-g.addFile("driver.cpp");
+g.addFile("hehe.txt");
+
 
 g.commit();
 
