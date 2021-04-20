@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include "miniGit.hpp"
 
 using namespace std;
-#include <filesystem>
 namespace fs = std::filesystem;
 
 
@@ -155,6 +155,10 @@ void miniGit::removeFile(string name)
         tmp_s = tmp_s->next;
         delete holder;
         holder = NULL;
+
+        cout << "File removed successfully" << endl;
+
+        return;
     }
 
     //otherwise
@@ -172,8 +176,12 @@ void miniGit::removeFile(string name)
             delete tmp_s;
             tmp_s = NULL;
             deleted = true;
+            cout << "File removed successfully" << endl;
         }
     }
+
+    cout << "File was not found" << endl;
+    return;
 }
 
 //need to maintain commit numbe before adding- make that change
@@ -202,7 +210,7 @@ void miniGit::commit()
         ofile.open(".minigit/" + versionHolder);
         string line = "";
         while (getline(ifile, line)) ofile << line << endl;
-        cout << "Added to the minigit" << endl;
+        cout << "Added to MiniGit" << endl;
         
         ofile.close();
         ifile.close();
@@ -299,13 +307,29 @@ void miniGit::checkout(int commitNumber)
     {  
         singlyNode* curr = dNode->head;
 
+        ifstream iFile;
+        ofstream oFile;
+
         while (curr != NULL)
         {
+            string line = "";
             // stuff stuff stuff
             // prolly writing to files and copying to current files
 
+            iFile.open(".minigit/" + curr->fileVersion);
+            oFile.open(curr->fileName);
+            oFile.clear();
+            while (getline(iFile, line))
+            {
+                oFile << line;
+            }
+
             curr = curr->next;
         }
+
+        cout << "Now viewing files from Commit #" << commitNumber << endl;
+
+        return;
     }
 }
 
