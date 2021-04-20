@@ -71,7 +71,7 @@ int main()
                     getline(cin, comnum);
                     for (int i = 0; i < comnum.length(); i++)
                     {
-                        if (comnum[i] != '1' || comnum[i] != '2' || comnum[i] != '3' || comnum[i] != '4' || comnum[i] != '5' || comnum[i] != '6' || comnum[i] != '7' || comnum[i] != '8' || comnum[i] != '9' || comnum[i] != '0');
+                        if (comnum[i] != '1' || comnum[i] != '2' || comnum[i] != '3' || comnum[i] != '4' || comnum[i] != '5' || comnum[i] != '6' || comnum[i] != '7' || comnum[i] != '8' || comnum[i] != '9' || comnum[i] != '0')
                         {
                             cout << "Please enter a positive integer" << endl;
                             input = false;
