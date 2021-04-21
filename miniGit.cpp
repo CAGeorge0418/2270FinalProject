@@ -151,6 +151,12 @@ void miniGit::removeFile(string name)
     singlyNode* tmp_s = tmp_d->head;
 
     //if the head node in SLL is the one to delete
+    if (tmp_s == NULL)
+    {
+        cout << "File not found" << endl;
+        return;
+    }
+
     if (tmp_s->fileName == name)
     {
         singlyNode* holder = tmp_s;
@@ -158,13 +164,15 @@ void miniGit::removeFile(string name)
         delete holder;
         holder = NULL;
 
+        tmp_d->head = tmp_s;
+
         cout << "File removed successfully" << endl;
 
         return;
     }
 
     //otherwise
-    singlyNode* prev;
+    singlyNode* prev = NULL;
     bool deleted =  false;
 
     while (tmp_s->next != NULL && deleted == false) 
@@ -179,6 +187,7 @@ void miniGit::removeFile(string name)
             tmp_s = NULL;
             deleted = true;
             cout << "File removed successfully" << endl;
+            return;
         }
     }
 
@@ -212,7 +221,7 @@ void miniGit::commit()
         ofile.open(".minigit/" + versionHolder);
         string line = "";
         while (getline(ifile, line)) ofile << line << endl;
-        cout << "Added to MiniGit" << endl;
+        cout << "Added " << versionHolder << " to MiniGit" << endl;
         
         ofile.close();
         ifile.close();
@@ -230,7 +239,16 @@ void miniGit::commit()
            string oldv = traverseGit(name,chief);
            int oldv_int = stoi(oldv)-1;
 
-           oldVersion.open(".minigit/"+ name + "_" + oldv);
+           if (oldv_int > 9)
+           {
+               oldv = to_string(oldv_int);
+           }
+           else
+           {
+               oldv = "0" + to_string(oldv_int);
+           }
+
+           oldVersion.open(".minigit/" + name + "_" + oldv);
 
            string old_comp = "";
            string new_comp = "";
@@ -352,4 +370,29 @@ doublyNode* miniGit::findDNode(int commitNumber)
     cout << "Could not find DoublyNode" << endl;
     return NULL;
 
+}
+
+void miniGit::log()
+{
+    doublyNode *dNode = chief;
+    singlyNode *sNode = NULL;
+
+    while (dNode != NULL)
+    {
+        cout << "Commit Number: " << dNode->commitNumber;
+        sNode = dNode->head;
+        int count = 1;
+        while (sNode != NULL)
+        {   
+            cout << count << "." << endl;
+            cout << "   Filename: " << sNode->fileName << endl;
+            cout << "   File Version: " << sNode->fileVersion << endl;
+            cout << endl;
+            sNode = sNode->next;
+            count++;
+        }
+
+        dNode = dNode->next;
+    }
+    return;
 }
