@@ -117,7 +117,13 @@ int main()
                         }
                     }
                 }
-                mini.checkout(stoi(comnum));
+
+                bool checked = mini.checkout(stoi(comnum));
+
+                if (checked)
+                {
+                    curr = mini.findDNode(stoi(comnum));
+                }
 
                 cout << endl;
 
