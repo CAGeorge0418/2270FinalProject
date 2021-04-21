@@ -12,8 +12,8 @@ using namespace std;
 
 struct singlyNode
 {
-  string fileName;
-  string fileVersion;
+  string fileName = "";
+  string fileVersion = "";
   singlyNode* next = NULL;
 };
 
@@ -40,6 +40,7 @@ class miniGit
   void checkout(int commitNumber);
 
   doublyNode* findDNode(int commitNumber);
+  void log(); 
 };
 
 #endif
