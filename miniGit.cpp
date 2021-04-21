@@ -341,14 +341,14 @@ while (oldNode != NULL)
 
 }
 
-void miniGit::checkout(int commitNumber)
+bool miniGit::checkout(int commitNumber)
 {
     doublyNode* dNode = findDNode(commitNumber);
 
     if (dNode == NULL)
     {
         cout << "Could not find the version with Commit Number " << commitNumber << endl;
-        return;
+        return false;
     }
     else
     {  
@@ -376,7 +376,7 @@ void miniGit::checkout(int commitNumber)
 
         cout << "Now viewing files from Commit #" << commitNumber << endl;
 
-        return;
+        return true;
     }
 }
 
