@@ -10,39 +10,37 @@
 
 using namespace std;
 
-struct doublyNode{
-  int commitNumber;
-  singlyNode* head;
-  doublyNode* previous;
-  doublyNode* next;
+struct singlyNode
+{
+  string fileName = "";
+  string fileVersion = "";
+  singlyNode* next = NULL;
 };
 
-struct singlyNode{
-  string fileName;
-  string fileVersion;
-  singlyNode* next;
+struct doublyNode
+{
+  int commitNumber = 0;
+  singlyNode* head = NULL;
+  doublyNode* previous = NULL;
+  doublyNode* next = NULL;
 };
 
-
-class miniGit{
+class miniGit
+{
   private:
-  doublyNode head;
-  
+  doublyNode* chief;
   
   public:
   miniGit();
   ~miniGit();
   
-  void addFile(string name);
+  string addFile(string name);
   void commit();
   void removeFile(string name);
   void checkout(int commitNumber);
-  
-  
-  
-  
-  
-  
+
+  doublyNode* findDNode(int commitNumber);
+  void log(); 
 };
 
 #endif
