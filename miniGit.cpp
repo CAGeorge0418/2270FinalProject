@@ -199,7 +199,17 @@ void miniGit::removeFile(string name)
 void miniGit::commit()
 {
     doublyNode* tmp_d = chief;
-    while (tmp_d->next != NULL) tmp_d = tmp_d->next;
+
+    while (tmp_d->next != NULL)
+    {
+        tmp_d = tmp_d->next;
+    }
+
+    if (tmp_d->head == NULL)
+    {
+        cout << "Cannot commit nothing" << endl;
+        return;
+    }
 
     singlyNode* tmp_s = tmp_d->head;
     ifstream ifile;
@@ -377,9 +387,9 @@ void miniGit::log()
     doublyNode *dNode = chief;
     singlyNode *sNode = NULL;
 
-    while (dNode != NULL)
+    while (dNode->next != NULL)
     {
-        cout << "Commit Number: " << dNode->commitNumber;
+        cout << "Commit Number: " << dNode->commitNumber << endl;
         sNode = dNode->head;
         int count = 1;
         while (sNode != NULL)
