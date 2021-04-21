@@ -102,7 +102,7 @@ string miniGit::addFile(string name)
     
 
     //locates the most current double node
-    while (tmp_d->next != NULL) tmp_d = tmp_d->next;
+    tmp_d = tail;
     
     //if the head doesnt exist make it
     if (tmp_d->head == NULL)
@@ -297,7 +297,7 @@ void miniGit::commit()
         }
 
         tmp_s = tmp_s->next;
-        
+        ifile.close();
 
     }
 
