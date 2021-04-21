@@ -9,11 +9,12 @@ int main()
     int numopt = 0;
 
     miniGit mini;
-    
 
+    doublyNode* curr = mini.getChief();
+    
     cout << "Welcome to MiniGit!" << endl;
 
-    while (numopt != 5)
+    while (numopt != 6)
     {
         cout << endl;
         cout << "----- Menu -----" << endl;
@@ -37,6 +38,11 @@ int main()
         {
             case 1:
             {
+                if (curr != mini.getTail())
+                {
+                    cout << "Cannot add a file while checking out an older version" << endl;
+                    break;
+                }
                 string filename;
                 bool found = false;
                 ifstream iFile;
@@ -64,6 +70,11 @@ int main()
             }
             case 2:
             {
+                if (curr != mini.getTail())
+                {
+                    cout << "Cannot remove a file while checking out an older version" << endl;
+                    break;
+                }
                 string filename;
                 cout << "Please enter the name of the file to be removed:" << endl;
                 getline(cin, filename);
@@ -76,6 +87,12 @@ int main()
             }
             case 3:
             {
+                if (curr != mini.getTail())
+                {
+                    cout << "Cannot commit while checking out an older version" << endl;
+                    break;
+                }
+
                 mini.commit();
 
                 cout << endl;
