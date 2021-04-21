@@ -29,6 +29,7 @@ class miniGit
 {
   private:
   doublyNode* chief;
+  doublyNode* tail;
   
   public:
   miniGit();
@@ -38,6 +39,9 @@ class miniGit
   void commit();
   void removeFile(string name);
   void checkout(int commitNumber);
+
+  doublyNode* getChief();
+  doublyNode* getTail();
 
   doublyNode* findDNode(int commitNumber);
   void log(); 
