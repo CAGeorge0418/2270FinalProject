@@ -31,8 +31,23 @@ int main()
             case 1:
             {
                 string filename;
+                bool found = false;
+                ifstream iFile;
                 cout << "Please enter the name of the file to be added:" << endl;
-                getline(cin, filename);
+                while (!found)
+                {
+                    getline(cin, filename);
+                    iFile.open(filename);
+                    if (iFile.is_open())
+                    {
+                        found = true;
+                    }
+                    else
+                    {
+                        cout << "Please enter an existing file in the directory:" << endl;
+                    }
+                    iFile.close();
+                }
 
                 cout << mini.addFile(filename) << endl;
 
