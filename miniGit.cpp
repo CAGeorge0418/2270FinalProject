@@ -14,6 +14,7 @@ miniGit::miniGit()
     fs::create_directory(".minigit");
 
     chief = new doublyNode;
+    tail = chief;
     chief->commitNumber = 0;
 }
 
@@ -309,6 +310,7 @@ tmp_d->next = adding;
 adding->commitNumber = tmp_d->commitNumber + 1;
 adding->next = NULL;
 adding->previous = tmp_d;
+tail = adding;
 
 
 //copies previous SLL to current node
@@ -366,7 +368,7 @@ void miniGit::checkout(int commitNumber)
             oFile.clear();
             while (getline(iFile, line))
             {
-                oFile << line;
+                oFile << line << endl;
             }
 
             curr = curr->next;
@@ -420,4 +422,14 @@ void miniGit::log()
         dNode = dNode->next;
     }
     return;
+}
+
+doublyNode* miniGit::getChief()
+{
+    return chief;
+}
+
+doublyNode*  miniGit::getTail()
+{
+    return tail;
 }
