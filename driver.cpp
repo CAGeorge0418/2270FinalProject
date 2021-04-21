@@ -1,38 +1,124 @@
 #include <iostream>
-#include <fstream>
-#include <io.h>
 #include "miniGit.hpp"
 
 using namespace std;
 
 int main()
 {
-    mkdir("minigit");
-    string filename;
-    cout << "input filename:" << endl;
-    getline(cin, filename);
-    ifstream ifile;
-    ifile.open(filename);
+    string option = "0";
+    int numopt = 0;
 
-    if (!ifile.is_open())
+    miniGit mini;
+    
+
+    cout << "Welcome to MiniGit!" << endl;
+
+    while (numopt != 5)
     {
-        cout << "could not open " << filename << endl;
-    }
-    else
-    {
-        ofstream ofile;
-        ofile.open("minigit/driver01.cpp");
-        string line = "";
-        while (getline(ifile, line))
+        cout << endl;
+        cout << "----- Menu -----" << endl;
+        cout << "1. Add a File" << endl;
+        cout << "2. Remove a File" << endl;
+        cout << "3. Commit Changes" << endl;
+        cout << "4. Checkout Previous Version" << endl;
+        cout << "5. Log of Previous Commits" << endl;
+        cout << "6. Quit" << endl;
+
+        getline(cin, option);
+        numopt = stoi(option);
+
+        switch(numopt)
         {
-            ofile << line << endl;
-        }
-        cout << "done" << endl;
-        
-        ofile.close();
-        ifile.close();
-    }
+            case 1:
+            {
+                string filename;
+                bool found = false;
+                ifstream iFile;
+                cout << "Please enter the name of the file to be added:" << endl;
+                while (!found)
+                {
+                    getline(cin, filename);
+                    iFile.open(filename);
+                    if (iFile.is_open())
+                    {
+                        found = true;
+                    }
+                    else
+                    {
+                        cout << "Please enter an existing file in the directory:" << endl;
+                    }
+                    iFile.close();
+                }
 
-    
-    
+                cout << mini.addFile(filename) << endl;
+
+                cout << endl;
+
+                break;
+            }
+            case 2:
+            {
+                string filename;
+                cout << "Please enter the name of the file to be removed:" << endl;
+                getline(cin, filename);
+
+                mini.removeFile(filename);
+
+                cout << endl;
+
+                break;
+            }
+            case 3:
+            {
+                mini.commit();
+
+                cout << endl;
+
+                break;
+            }
+            case 4:
+            {
+                string comnum;
+                bool input = false;
+                cout << "Please enter the Commit Number of the desired version:" << endl;
+                while (!input)
+                {
+                    input = true;
+                    getline(cin, comnum);
+                    for (int i = 0; i < comnum.length(); i++)
+                    {
+                        if (comnum[i] != '1' && comnum[i] != '2' && comnum[i] != '3' && comnum[i] != '4' && comnum[i] != '5' && comnum[i] != '6' && comnum[i] != '7' && comnum[i] != '8' && comnum[i] != '9' && comnum[i] != '0')
+                        {
+                            cout << "Please enter a positive integer" << endl;
+                            input = false;
+                        }
+                    }
+                }
+                mini.checkout(stoi(comnum));
+
+                cout << endl;
+
+                break;
+            }
+            case 5:
+            {
+                cout << "Here is the current log of MiniGit:" << endl;
+                cout << "-----------------------------------" << endl;
+                mini.log();
+
+                break;
+            }
+            case 6:
+            {
+                cout << "Goodbye!" << endl;
+                break;
+            }
+            default:
+            {
+                cout << "Please enter a number between 1 and 5." << endl;
+                break;
+            }
+        }
+
+    }
 }
