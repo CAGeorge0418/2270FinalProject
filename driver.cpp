@@ -115,7 +115,7 @@ int main()
             }
             default:
             {
-                cout << "Please enter a number between 1 and 5." << endl;
+                cout << "Please enter a number between 1 and 6" << endl;
                 break;
             }
         }
