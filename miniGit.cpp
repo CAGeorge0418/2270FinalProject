@@ -67,13 +67,15 @@ string traverseGit(string name, doublyNode* chief)
                 //makes integer of file number, iterates it and returns in the correct format
                 int holder;
                 if(temp_s->fileVersion == "") return "00";
-                else if(stoi(temp_s->fileVersion.substr(temp_s->fileVersion.size()-5, 1)) > 0)
-                    holder = stoi(temp_s->fileVersion.substr(temp_s->fileVersion.size()-5, 2));
+                else if(stoi(temp_s->fileVersion.substr(temp_s->fileVersion.size()-2, 1)) > 0)
+                {
+                    holder = stoi(temp_s->fileVersion.substr(temp_s->fileVersion.size()-2, 2));
+                }
                 
-                else holder = stoi(temp_s->fileVersion.substr(temp_s->fileVersion.size()-5, 1));
+                else holder = stoi(temp_s->fileVersion.substr(temp_s->fileVersion.size()-1, 1));
 
                 holder++;
-                if (holder >9) return to_string(holder);
+                if (holder > 9) return to_string(holder);
                 else return "0" + to_string(holder);
 
             }
@@ -119,7 +121,7 @@ string miniGit::addFile(string name)
 
     if (quit == true) 
     {
-        tmp_s->fileVersion = name.substr(0,name.size()-4) + "_" + version + name.substr(name.size()-4, 4);
+        tmp_s->fileVersion = name + "_" + version;
         return "File successfully added";
     }
 
@@ -133,7 +135,7 @@ string miniGit::addFile(string name)
 
     singlyNode* adding = new singlyNode;
     adding->fileName = name;
-    adding->fileVersion = name.substr(0,name.size()-4) + "_" + version + name.substr(name.size()-4, 4);
+    adding->fileVersion = name + "_" + version;
     adding->next = NULL;
 
     tmp_s->next = adding;
@@ -228,7 +230,7 @@ void miniGit::commit()
            string oldv = traverseGit(name,chief);
            int oldv_int = stoi(oldv)-1;
 
-           oldVersion.open(".minigit/"+ name.substr(0,name.size()-4) + "_" + "0" + to_string(oldv_int) + name.substr(name.size()-4, 4));
+           oldVersion.open(".minigit/"+ name + "_" + oldv);
 
            string old_comp = "";
            string new_comp = "";
@@ -253,7 +255,7 @@ void miniGit::commit()
             {
                 ofstream ofile;
                 oldv_int++;
-                ofile.open(".minigit/" + name.substr(0,name.size()-4) + "_" + "0" + to_string(oldv_int) + name.substr(name.size()-4, 4));
+                ofile.open(".minigit/" + name + "_0" + to_string(oldv_int));
 
                 line = "";
                 while (getline(ifile, line)) ofile << line << endl;
