@@ -312,15 +312,30 @@ adding->previous = tmp_d;
 
 
 //copies previous SLL to current node
-singlyNode* tracer = tmp_d->head;
-adding->head = tracer;
-singlyNode* helper = adding->head;
-while(tracer->next != NULL)
+singlyNode* oldNode = tmp_d->head;
+singlyNode* prev = NULL;
+
+while (oldNode != NULL)
+{
+    singlyNode* newSNode = new singlyNode;
+
+    newSNode->fileName = oldNode->fileName;
+    newSNode->fileVersion = oldNode->fileVersion;
+    newSNode->next = NULL;
+
+    if (adding->head = NULL)
     {
-        helper->next = tracer->next;
-        tracer = tracer->next;
-        helper = helper->next;
+        adding->head = newSNode;
     }
+    else if (prev != NULL)
+    {
+        prev->next = newSNode;
+    }
+
+    oldNode = oldNode->next;
+    prev = newSNode;
+    newSNode = NULL;
+}
 
 }
 
