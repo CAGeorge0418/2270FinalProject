@@ -14,7 +14,7 @@ int main()
     
     cout << "Welcome to MiniGit!" << endl;
 
-    while (numopt != 7)
+    while (numopt != 8)
     {
         cout << endl;
         cout << "----- Menu -----" << endl;
