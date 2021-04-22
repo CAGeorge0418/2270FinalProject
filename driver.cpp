@@ -14,7 +14,7 @@ int main()
     
     cout << "Welcome to MiniGit!" << endl;
 
-    while (numopt != 6)
+    while (numopt != 7)
     {
         cout << endl;
         cout << "----- Menu -----" << endl;
@@ -23,10 +23,12 @@ int main()
         cout << "3. Commit Changes" << endl;
         cout << "4. Checkout Previous Version" << endl;
         cout << "5. Log of Previous Commits" << endl;
-        cout << "6. Quit" << endl;
+        cout << "6. Return to head of miniGit" << endl;
+        cout << "7. Quit" << endl;
+
 
         getline(cin, option);
-        if (option != "1" && option != "2" && option != "3" && option != "4" && option != "5" && option != "6")
+        if (option != "1" && option != "2" && option != "3" && option != "4" && option != "5" && option != "6" && option != "7")
         {
             option = "0";
         }
@@ -95,6 +97,8 @@ int main()
 
                 mini.commit();
 
+                curr = mini.getTail();
+
                 cout << endl;
 
                 break;
@@ -139,9 +143,17 @@ int main()
             }
             case 6:
             {
+                curr = mini.getTail();
+                cout << "Returning to head of miniGit!" << endl; 
+                break;
+            }
+
+            case 7:
+            {
                 cout << "Goodbye!" << endl;
                 break;
             }
+
             default:
             {
                 cout << "Please enter a number between 1 and 6" << endl;
