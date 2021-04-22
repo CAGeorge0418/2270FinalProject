@@ -21,14 +21,15 @@ int main()
         cout << "1. Add a File" << endl;
         cout << "2. Remove a File" << endl;
         cout << "3. Commit Changes" << endl;
-        cout << "4. Checkout Previous Version" << endl;
-        cout << "5. Log of Previous Commits" << endl;
-        cout << "6. Return to head of miniGit" << endl;
-        cout << "7. Quit" << endl;
+        cout << "4. Checkout Another Version" << endl;
+        cout << "5. Checkout Previous Commit" << endl;
+        cout << "6. Return to the Head of MiniGit" << endl;
+        cout << "7. Log of Previous Commits" << endl;
+        cout << "8. Quit" << endl;
 
 
         getline(cin, option);
-        if (option != "1" && option != "2" && option != "3" && option != "4" && option != "5" && option != "6" && option != "7")
+        if (option != "1" && option != "2" && option != "3" && option != "4" && option != "5" && option != "6" && option != "7" && option != "8")
         {
             option = "0";
         }
@@ -135,22 +136,30 @@ int main()
             }
             case 5:
             {
+                mini.checkout(mini.getTail()->commitNumber - 2);
+
+                curr = mini.getTail()->previous->previous;
+                
+                break;
+            }
+            
+            case 6:
+            {
+                mini.checkout(mini.getTail()->commitNumber);
+
+                curr = mini.getTail();
+                cout << "Returning to the head of MiniGit" << endl; 
+                break;
+            }
+            case 7:
+            {
                 cout << "Here is the current log of MiniGit:" << endl;
                 cout << "-----------------------------------" << endl;
                 mini.log();
 
                 break;
             }
-            case 6:
-            {
-                mini.checkout(mini.getTail()->commitNumber);
-
-                curr = mini.getTail();
-                cout << "Returning to head of miniGit!" << endl; 
-                break;
-            }
-
-            case 7:
+            case 8:
             {
                 cout << "Goodbye!" << endl;
                 break;
