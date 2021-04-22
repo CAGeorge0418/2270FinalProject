@@ -351,7 +351,6 @@ bool miniGit::checkout(int commitNumber)
             string line = "";
 
             iFile.open(".minigit/" + curr->fileVersion);
-            cout << "curr fileversion " << curr->fileVersion << endl;
             oFile.open(curr->fileName);
             oFile.clear();
             while (getline(iFile, line))
