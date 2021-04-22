@@ -143,6 +143,8 @@ int main()
             }
             case 6:
             {
+                mini.checkout(mini.getTail()->commitNumber);
+
                 curr = mini.getTail();
                 cout << "Returning to head of miniGit!" << endl; 
                 break;
