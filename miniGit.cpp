@@ -18,39 +18,23 @@ miniGit::miniGit()
     chief->commitNumber = 0;
 }
 
+void destructor(doublyNode* chief)
+{
+    singlyNode* tmp_s = chief->head;
+    singlyNode* leader;
+    while(tmp_s != NULL)
+    {
+        leader = tmp_s->next;
+        delete tmp_s;
+        tmp_s = leader; 
+    }
+    if(chief->next != NULL) destructor(chief->next);
+    delete chief;
+}
+
 miniGit::~miniGit()
 {
-    doublyNode* tmp_d = chief;
-
-    while(tmp_d->next != NULL)tmp_d = tmp_d->next;
-
-    if(tmp_d->head != NULL)
-        {
-        
-        singlyNode* temp_s = tmp_d->head;
-
-        while(temp_s != NULL)
-            {
-                tmp_d->head = tmp_d->head->next;
-                delete temp_s;
-                temp_s = tmp_d->head;
-
-            }
-
-        }
-        
-    tmp_d = chief;
-    doublyNode* lag = chief;
-
-    while(tmp_d->next != NULL)
-    {
-        tmp_d = tmp_d->next;
-        delete lag;
-        lag = tmp_d;
-    }
-
-    delete tmp_d;
-    tmp_d = NULL;
+   destructor(chief);
 }
 
 string traverseGit(string name, doublyNode* chief)
@@ -82,7 +66,6 @@ string traverseGit(string name, doublyNode* chief)
             }
             temp_s = temp_s->next;
         }
-
     return "00";
 }
 
@@ -221,6 +204,7 @@ void miniGit::commit()
         string versionHolder = tmp_s->fileVersion;
         ifile.open(".minigit/" + versionHolder);
 
+
         //file is not in minigit- must add it
         if (!ifile.is_open())
         {
@@ -286,10 +270,15 @@ void miniGit::commit()
                 oldv_int++;
                 ofile.open(".minigit/" + name + "_0" + to_string(oldv_int));
 
+                tmp_s->fileVersion = name + "_0" + to_string(oldv_int);
+
+                string added = name + "_0" + to_string(oldv_int);
+
                 line = "";
                 while (getline(ifile, line)) ofile << line << endl;
 
                 ofile.close();
+                cout << "Added " << added << " to MiniGit" << endl;
             }
 
             oldVersion.close();
@@ -325,7 +314,7 @@ while (oldNode != NULL)
     newSNode->fileVersion = oldNode->fileVersion;
     newSNode->next = NULL;
 
-    if (adding->head = NULL)
+    if (adding->head == NULL)
     {
         adding->head = newSNode;
     }
