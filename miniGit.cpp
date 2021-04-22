@@ -349,10 +349,9 @@ bool miniGit::checkout(int commitNumber)
         while (curr != NULL)
         {
             string line = "";
-            // stuff stuff stuff
-            // prolly writing to files and copying to current files
 
             iFile.open(".minigit/" + curr->fileVersion);
+            cout << "curr fileversion " << curr->fileVersion << endl;
             oFile.open(curr->fileName);
             oFile.clear();
             while (getline(iFile, line))
@@ -361,6 +360,8 @@ bool miniGit::checkout(int commitNumber)
             }
 
             curr = curr->next;
+            iFile.close();
+            oFile.close();
         }
 
         cout << "Now viewing files from Commit #" << commitNumber << endl;
