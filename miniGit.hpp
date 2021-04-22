@@ -38,7 +38,7 @@ class miniGit
   string addFile(string name);
   void commit();
   void removeFile(string name);
-  void checkout(int commitNumber);
+  bool checkout(int commitNumber);
 
   doublyNode* getChief();
   doublyNode* getTail();
