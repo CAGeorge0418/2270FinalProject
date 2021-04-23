@@ -106,6 +106,20 @@ int main()
             }
             case 4:
             {
+                string answer;
+                cout << "WARNING: Any changes not committed to miniGit will be not be saved if you checkout. Do you still wish to proceed? (Enter 'Yes' or 'No')" << endl;
+                while(answer != "Yes" && answer != "No" && answer != "yes" && answer != "no") 
+                {
+                    getline(cin, answer);
+                    if(answer != "Yes" && answer != "No" && answer != "yes" && answer != "no") cout << "Invalid Response: Enter 'Yes' or 'No'" << endl;
+                }
+
+                if(answer == "No" || answer == "no")
+                {
+                    cout << "Returning to menu" << endl;
+                    break;
+                }
+
                 string comnum;
                 bool input = false;
                 cout << "Please enter the Commit Number of the desired version:" << endl;
@@ -142,7 +156,7 @@ int main()
                 
                 break;
             }
-            
+
             case 6:
             {
                 mini.checkout(mini.getTail()->commitNumber);
@@ -151,6 +165,7 @@ int main()
                 cout << "Returning to the head of MiniGit" << endl; 
                 break;
             }
+
             case 7:
             {
                 cout << "Here is the current log of MiniGit:" << endl;
@@ -159,12 +174,13 @@ int main()
 
                 break;
             }
+
             case 8:
             {
                 cout << "Goodbye!" << endl;
                 break;
             }
-
+            
             default:
             {
                 cout << "Please enter a number between 1 and 6" << endl;
